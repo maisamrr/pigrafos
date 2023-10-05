@@ -7,14 +7,19 @@ import java.util.List;
 
 public class RestApiCaller {
     public static void main(String[] args) {
-        LabyrinthSolver client = new LabyrinthSolver(new LabyrinthClient());
+        LabyrinthSolver solver = new LabyrinthSolver(new LabyrinthClient());
         List<String> labirinthList;
         try {
-            String labyrinth = client.getRandomLabyrint();
+            String labyrinth = solver.getRandomLabyrinth();
+            String user = "Pigrafos";
 
-            client.solve("Pigrafos", labyrinth);
+//            List<Integer> pigrafos = solver.solve("Pigrafos", labyrinth);
+//            pigrafos.remove(0);
+//            System.out.println(pigrafos);
+//
+//            System.out.println(solver.verifyResponse(user, labyrinth, pigrafos));
 
-
+                solver.solve(user, labyrinth);
         } catch (Exception e) {
             e.printStackTrace();
         }

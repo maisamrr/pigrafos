@@ -7,9 +7,19 @@ import java.util.Map;
 
 public class LabyrinthGraph {
     private Map<Integer, List<Integer>> adjacencyList;
+    private Map<Integer, VertexType> vertexTypes;
 
     public LabyrinthGraph() {
         this.adjacencyList = new HashMap<>();
+        this.vertexTypes = new HashMap<>();
+    }
+
+    public Map<Integer, VertexType> getVertexTypes() {
+        return vertexTypes;
+    }
+
+    public void setVertexType(int vertex, VertexType type) {
+        vertexTypes.put(vertex, type);
     }
 
     public void addVertex(int vertex) {

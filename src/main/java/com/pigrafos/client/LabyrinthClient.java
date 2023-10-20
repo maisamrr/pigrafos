@@ -19,9 +19,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.KeyManagementException;
+import java.security.cert.X509Certificate;
+
 public class LabyrinthClient {
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private final CloseableHttpClient httpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public LabyrinthClient() throws NoSuchAlgorithmException, KeyManagementException {
+        // SSLContext personalizado
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
+        sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
+
+        // configura HttpClientBuilder para usar o SSLContext personalizado
+        httpClient = HttpClients.custom()
+                .setSslcontext(sslContext)
+                .build();
+    }
+
+    private static class InsecureTrustManager implements X509TrustManager {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            // Não faz a verificação do cliente
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            // Não faz a verificação do servidor
+        }
+    }
 
     public List<String> verifyLabyrinths() throws IOException {
         String url = "https://gtm.delary.dev/labirintos";

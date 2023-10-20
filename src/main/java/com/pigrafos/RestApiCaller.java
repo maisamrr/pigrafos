@@ -7,10 +7,20 @@ import com.pigrafos.service.LabyrinthSolver;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.security.NoSuchAlgorithmException;
+import java.security.KeyManagementException;
 
 public class RestApiCaller {
     public static void main(String[] args) {
-        LabyrinthSolver solver = new LabyrinthSolver(new LabyrinthClient());
+        LabyrinthSolver solver = null;
+
+        try {
+            solver = new LabyrinthSolver(new LabyrinthClient());
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+            return;
+        }
+
         List<String> labirinthList;
         try {
 

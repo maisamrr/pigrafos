@@ -28,9 +28,9 @@ public class FinalResponse {
 
     @Override
     public String toString() {
-        return "FinalResponse{" +
-                "isValid=" + isValid +
-                ", moves=" + moves +
-                '}';
+        return "Final Response {" +
+                "isValid = " + isValid +
+                ", moves = " + moves +
+                " }";
     }
 }

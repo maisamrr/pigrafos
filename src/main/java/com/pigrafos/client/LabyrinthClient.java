@@ -22,7 +22,6 @@ import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.KeyManagementException;
 import java.security.cert.X509Certificate;
@@ -37,7 +36,7 @@ public class LabyrinthClient {
         TrustManager[] trustAllCertificates = new TrustManager[] { new InsecureTrustManager() };
         sslContext.init(null, trustAllCertificates, new java.security.SecureRandom());
 
-        // configura HttpClientBuilder para usar o SSLContext personalizado
+        // Configura HttpClientBuilder para usar o SSLContext personalizado
         httpClient = HttpClients.custom()
                 .setSslcontext(sslContext)
                 .build();
@@ -49,16 +48,16 @@ public class LabyrinthClient {
         }
 
         public void checkClientTrusted(X509Certificate[] certs, String authType) {
-            // Não faz a verificação do cliente
+
         }
 
         public void checkServerTrusted(X509Certificate[] certs, String authType) {
-            // Não faz a verificação do servidor
+
         }
     }
 
     public List<String> verifyLabyrinths() throws IOException {
-        String url = "https://gtm.delary.dev/labirintos";
+        String url = "http://localhost:8080/labirintos";
         HttpGet request = new HttpGet(url);
 
         CloseableHttpResponse httpResponse = httpClient.execute(request);
@@ -76,7 +75,7 @@ public class LabyrinthClient {
     }
 
     public LabyrinthResponse startExploration(String user, String labyrinths) throws IOException {
-        String url = "https://gtm.delary.dev/iniciar";
+        String url = "http://localhost:8080/iniciar";
         HttpPost request = new HttpPost(url);
         final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\"}";
@@ -93,8 +92,6 @@ public class LabyrinthClient {
         if (statusCode == 200) {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
-
-
             return objectMapper.readValue(responseBody, LabyrinthResponse.class);
         } else {
             throw new IOException("Erro na solicitação de exploração: Código de status " + statusCode);
@@ -102,8 +99,7 @@ public class LabyrinthClient {
     }
 
     public LabyrinthResponse move(String user, String labyrinths, int newPosition) throws IOException {
-        String url = "https://gtm.delary.dev/movimentar";
-
+        String url = "http://localhost:8080/movimentar";
         HttpPost request = new HttpPost(url);
         final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\",\"nova_posicao\":" + newPosition + "}";
@@ -121,7 +117,6 @@ public class LabyrinthClient {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
 
-
             return objectMapper.readValue(responseBody, LabyrinthResponse.class);
         } else {
             throw new IOException("Erro na solicitação de movimento: Código de status " + statusCode);
@@ -129,7 +124,7 @@ public class LabyrinthClient {
     }
 
     public FinalResponse validatePath(String user, String labyrinths, List<Integer> todosMovimentos) throws IOException {
-        String url = "https://gtm.delary.dev/validar_caminho";
+        String url = "http://localhost:8080/validar_caminho";
         HttpPost request = new HttpPost(url);
         final List<NameValuePair> params = new ArrayList<>();
         String json = "{\"id\":\"" + user + "\",\"labirinto\":\"" + labyrinths + "\",\"todos_movimentos\":" + todosMovimentos + "}";
@@ -139,16 +134,13 @@ public class LabyrinthClient {
         request.setEntity(myEntity);
         request.setHeader("Content-type", "application/json");
         request.setHeader("Accept", "application/json");
-
         HttpResponse response = httpClient.execute(request);
 
         int statusCode = response.getStatusLine().getStatusCode();
 
-
         if (statusCode == 200) {
             HttpEntity entity = response.getEntity();
             String responseBody = EntityUtils.toString(entity);
-
 
             return objectMapper.readValue(responseBody, FinalResponse.class);
         } else {

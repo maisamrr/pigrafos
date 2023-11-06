@@ -13,19 +13,21 @@ import java.security.KeyManagementException;
 public class RestApiCaller {
     public static void main(String[] args) {
         LabyrinthSolver solver = null;
-
         try {
-            solver = new LabyrinthSolver(new LabyrinthClient());
+             solver = new LabyrinthSolver(new LabyrinthClient());
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             e.printStackTrace();
             return;
         }
 
         List<String> labirinthList;
+        long inicioTempoBfs = System.currentTimeMillis();
         try {
-
             String labyrinth = solver.getRandomLabyrinth();
             String user = "Pigrafos";
+
+            System.out.println(labyrinth);
+
             Map<Integer, VertexType> vertexTypes = solver.graphCreator(user, labyrinth).getVertexTypes();
             Map<Integer, List<Integer>> adjacencyList = solver.graphCreator(user, labyrinth).getAdjacencyList();
             AtomicReference<Integer> destination = new AtomicReference<>();
@@ -39,13 +41,16 @@ public class RestApiCaller {
                 } else if (v.equals(VertexType.valueOf("FINAL"))) {
                     destination.set(k);
                 }
-
             });
-            System.out.println(solver.shortestPath(source.get(), destination.get()));
 
-            System.out.println(solver.validatePath(user, labyrinth, solver.shortestPath(source.get(), destination.get())));
+            System.out.println(solver.bfs(source.get(), destination.get()));
+            System.out.println(solver.validatePath(user, labyrinth, solver.bfs(source.get(), destination.get())));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        long fimTempoBfs = System.currentTimeMillis();
+        long execucaoTempoBfs = fimTempoBfs - inicioTempoBfs;
+
+        System.out.println("Tempo de execução bfs: " + execucaoTempoBfs + " ms");
     }
 }

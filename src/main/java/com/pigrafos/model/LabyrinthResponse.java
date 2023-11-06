@@ -14,6 +14,7 @@ public class LabyrinthResponse {
     @JsonProperty("movimentos")
     private List<Integer> possibleMoves;
 
+
     public int getActualPosition() {
         return actualPosition;
     }

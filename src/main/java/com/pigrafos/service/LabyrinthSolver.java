@@ -25,18 +25,15 @@ public class LabyrinthSolver {
     public String getRandomLabyrinth() throws IOException {
         List<String> labirinthList = client.verifyLabyrinths();
 
-
         Random random = new Random();
         int labyrinthNumber = random.nextInt(0, labirinthList.size());
         return labirinthList.get(labyrinthNumber);
     }
 
-    public LabyrinthGraph graphCreator(String user, String labirinth) throws IOException {
+    public LabyrinthGraph graphCreator(String user, String labyrinth) throws IOException {
+        LabyrinthResponse starting = client.startExploration(user, labyrinth);
 
-        LabyrinthResponse starting = client.startExploration(user, labirinth);
-
-
-        navigating(user, labirinth, starting);
+        navigating(user, labyrinth, starting);
         return graph;
     }
 
@@ -52,12 +49,9 @@ public class LabyrinthSolver {
         }
 
         if (graph.getNeighbors(currentPosition.getActualPosition()) == null) {
-
-
             graph.buildGraph(List.of(currentPosition));
         }
         path.push(currentPosition);
-
 
         for (int newPosition : currentPosition.getMovimentos()) {
             if (!visited.contains(newPosition)) {
@@ -73,43 +67,9 @@ public class LabyrinthSolver {
 
     }
 
-    public List<Integer> shortestPath(int source, int destination) {
-        Map<Integer, Integer> distance = new HashMap<>();
-        Map<Integer, Integer> parent = new HashMap<>();
-        Queue<Integer> queue = new LinkedList<>();
-
-        for (int vertex : graph.getAdjacencyList().keySet()) {
-            distance.put(vertex, Integer.MAX_VALUE);
-            parent.put(vertex, null);
-        }
-
-        distance.put(source, 0);
-        queue.add(source);
-
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-
-            for (int neighbor : graph.getNeighbors(current)) {
-                if (distance.get(neighbor) == Integer.MAX_VALUE) {
-                    distance.put(neighbor, distance.get(current) + 1);
-                    parent.put(neighbor, current);
-                    queue.add(neighbor);
-                }
-            }
-        }
-
-        List<Integer> shortestPath = new ArrayList<>();
-        int current = destination;
-
-        while (current != source) {
-            shortestPath.add(current);
-            current = parent.get(current);
-        }
-
-        shortestPath.add(source);
-        Collections.reverse(shortestPath);
-
-        return shortestPath;
+    public List<Integer> bfs(int source, int destination) {
+        BfsSearch graphSearch = new BfsSearch();
+        return graphSearch.bfs(graph, source, destination);
     }
 
     public FinalResponse validatePath(String user, String labirinth, List<Integer> moves) throws IOException {

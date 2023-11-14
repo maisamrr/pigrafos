@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class LabyrinthSolver {
-    private LabyrinthClient client;
-    private LabyrinthGraph graph;
-    private Stack<LabyrinthResponse> path;
-    private Set<Integer> visited;
+    private final LabyrinthClient client;
+    private final LabyrinthGraph graph;
+    private final Stack<LabyrinthResponse> path;
+    private final Set<Integer> visited;
 
     public LabyrinthSolver(LabyrinthClient client) {
         this.client = client;
@@ -48,9 +48,7 @@ public class LabyrinthSolver {
             graph.setVertexType(currentPosition.getActualPosition(), VertexType.COMMON);
         }
 
-        if (graph.getNeighbors(currentPosition.getActualPosition()) == null) {
-            graph.buildGraph(List.of(currentPosition));
-        }
+        graph.buildGraph(List.of(currentPosition));
         path.push(currentPosition);
 
         for (int newPosition : currentPosition.getMovimentos()) {

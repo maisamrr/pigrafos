@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class LabyrinthGraph {
-    private Map<Integer, List<Integer>> adjacencyList;
-    private Map<Integer, VertexType> vertexTypes;
+    private final Map<Integer, List<Integer>> adjacencyList;
+    private final Map<Integer, VertexType> vertexTypes;
 
     public LabyrinthGraph() {
         this.adjacencyList = new HashMap<>();
@@ -52,7 +52,9 @@ public class LabyrinthGraph {
                 if (!adjacencyList.containsKey(newPosition)) {
                     addVertex(newPosition);
                 }
-                addEdge(currentPosition, newPosition);
+                if (!adjacencyList.get(currentPosition).contains(newPosition)) {
+                    addEdge(currentPosition, newPosition);
+                }
             }
         }
     }

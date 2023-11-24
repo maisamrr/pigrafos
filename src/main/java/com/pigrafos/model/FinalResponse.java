@@ -21,16 +21,16 @@ public class FinalResponse {
         return isValid;
     }
 
-
     public int getMoves() {
         return moves;
     }
 
     @Override
     public String toString() {
-        return "Final Response {" +
-                "isValid = " + isValid +
-                ", moves = " + moves +
+        return "\nVALIDANDO: " +
+                "\n4 - Final Response { " +
+                "\n     Caminho válido: " + isValid +
+                "\n     Quantidade total de movimentos: " + moves +
                 " }";
     }
 }

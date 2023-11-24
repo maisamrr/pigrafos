@@ -25,16 +25,16 @@ public class RestApiCaller {
         try {
             String labyrinth = solver.getRandomLabyrinth();
             String user = "Pigrafos";
-
-            System.out.println(labyrinth);
+            System.out.println("*** PROGRAMA EM EXECUÇÃO ***");
+            System.out.println("\nID DO LABIRINTO: " + labyrinth);
 
             Map<Integer, VertexType> vertexTypes = solver.graphCreator(user, labyrinth).getVertexTypes();
             Map<Integer, List<Integer>> adjacencyList = solver.graphCreator(user, labyrinth).getAdjacencyList();
             AtomicReference<Integer> destination = new AtomicReference<>();
             AtomicReference<Integer> source = new AtomicReference<>();
-            System.out.println(vertexTypes);
-            System.out.println(adjacencyList);
-
+            System.out.println("\nMAPEAMENTO DO GRAFO: ");
+            System.out.println("1 - Identificação de vértices: " + vertexTypes);
+            System.out.println("2 - Lista de adjacência: " + adjacencyList);
             vertexTypes.forEach((k, v) -> {
                 if (v.equals(VertexType.valueOf("INITIAL"))) {
                     source.set(k);
@@ -42,8 +42,8 @@ public class RestApiCaller {
                     destination.set(k);
                 }
             });
-
-            System.out.println(solver.bfs(source.get(), destination.get()));
+            System.out.println("\nACHANDO A SAÍDA: ");
+            System.out.println("3 - Caminho mais curto: " + solver.bfs(source.get(), destination.get()));
             System.out.println(solver.validatePath(user, labyrinth, solver.bfs(source.get(), destination.get())));
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,6 +51,8 @@ public class RestApiCaller {
         long fimTempoBfs = System.currentTimeMillis();
         long execucaoTempoBfs = fimTempoBfs - inicioTempoBfs;
 
-        System.out.println("Tempo de execução bfs: " + execucaoTempoBfs + " ms");
+        System.out.println("5 - Tempo de execução: " + execucaoTempoBfs + " ms");
+        System.out.println("\n*** FIM DO PROGRAMA ***");
+
     }
 }
